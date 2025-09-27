@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Road of Yineng</title>
-    </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yineng Li — Personal Site</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="container">
+    <h1>Yineng Li</h1>
+    <p>Computer Engineering · St. John’s, NL · <a href="mailto:makeawish1998@outlook.com">Email me</a></p>
+  </header>
 
-    <body>
-        <h1>Hello I'm Yineng Li</h1>
-        <p>Welcome to my website!</p>
-    </body>
+  <main class="container">
+    <section class="card center">
+      <h2>Welcome</h2>
+      <p>This is my personal website. You can view my résumé outline and drill down into details.</p>
+      <a class="btn" href="resume.html">View Résumé</a>
+    </section>
+  </main>
+
+  <footer class="container footnote">
+    © <span id="y"></span> Yineng Li
+  </footer>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>

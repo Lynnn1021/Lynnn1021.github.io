@@ -1,21 +1,22 @@
-# CI & Deploy for a static site on GitHub Pages
-# - On PR to main: run checks only (no deploy)
-# - On push to main: run checks, then deploy to GitHub Pages
+# CI & Deploy for a static site hosted on GitHub Pages
+# Behavior:
+# - On pull_request -> run checks only (no deploy)
+# - On push to main -> run checks, then deploy to GitHub Pages
 
 name: CI & Deploy (GitHub Pages)
 
 on:
   pull_request:
-    branches: [ main ]        # Run checks for PRs targeting main
+    branches: [ main ]                 # Run checks for PRs targeting main
   push:
-    branches: [ main ]        # Deploy only when code is pushed/merged to main
+    branches: [ main ]                 # Deploy when code lands on main
 
 permissions:
-  contents: read              # Required to checkout code
-  pages: write                # Required to publish to GitHub Pages
-  id-token: write             # Required for OIDC token during deploy
+  contents: read                       # Needed to checkout code
+  pages: write                         # Needed to publish to Pages
+  id-token: write                      # Needed by deploy-pages for OIDC
 
-# Ensure only one Pages deploy runs at a time
+# Ensure only one Pages deployment at a time
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -26,54 +27,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Get repository contents
+      # 1) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2) Setup Node for CLI tools used below
+      # 2) Node is required for CLI tools below
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3) Basic HTML lint (will WARN if no config; you can add a .htmlhintrc later)
-      #    We convert failures to a soft warning so your first run doesn't hard-fail.
+      # 3) HTML lint. If no .htmlhintrc exists, do not fail the build yet.
       - name: HTMLHint (basic syntax)
         run: |
           npx --yes htmlhint "**/*.html" || \
-          (echo "HTMLHint found issues or no config present. Convert to warning for now."; exit 0)
+          (echo "HTMLHint found issues or no config; treating as warning."; exit 0)
 
-      # 4) Broken links check (find 404s). External sites may timeout; adjust args as needed.
+      # 4) Broken-link check with lychee.
+      #    IMPORTANT: --timeout must be a plain integer (seconds), not "20s".
       - name: Broken links (lychee)
         uses: lycheeverse/lychee-action@v1
         with:
-          # --exclude-mail: skip mailto: links
-          # --timeout 20s : fail fast on slow externals
-          # You can add --exclude <pattern> to ignore specific hosts/paths
-          args: --no-progress --verbose --exclude-mail --timeout 20s .
+          args: >
+            --no-progress
+            --verbose
+            --exclude-mail
+            --timeout 20
+            .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5) Lighthouse audit for performance/accessibility/SEO (against static files)
-      #    This gives a quick score to catch regressions; not a strict gate by default.
-      - name: Lighthouse CI (static)
+      # 5) Lighthouse audit against static files (performance/accessibility/SEO).
+      #    The action expects a *file path* in configPath; we provide lighthouserc.json.
+      - name: Lighthouse CI (static via config file)
         uses: treosh/lighthouse-ci-action@v11
         with:
-          configPath: |
-            {
-              "ci": {
-                "collect": { "staticDistDir": ".", "numberOfRuns": 1 },
-                "assert": {
-                  "assertions": {
-                    "categories:performance": ["warn", { "minScore": 0.60 }],
-                    "categories:accessibility": ["warn", { "minScore": 0.70 }]
-                  }
-                }
-              }
-            }
+          configPath: ./lighthouserc.json
 
   build:
-    # Only build when pushing to main, and only after tests passed
+    # Only run build/upload when pushing to main AND after tests passed
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
@@ -83,14 +75,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # If you use a build tool (e.g., Vite/React), run it here and change path to ./dist
+      # If you have a frontend build (Vite/React/etc.), run it here and set path to ./dist
       # - run: npm ci && npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # For a pure static site (index.html at repo root), upload the root directory.
-      # If you build to ./dist, set 'path: dist' instead.
+      # Pure static site: upload the repo root as the site artifact.
+      # If you build to ./dist, change "path: ." to "path: dist".
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

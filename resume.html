@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Résumé — Yineng Li</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="container">
+    <h1>Résumé</h1>
+    <nav class="actions">
+      <a class="btn btn-secondary" href="index.html">← Back</a>
+      <a class="btn" href="YinengLiCV.pdf" target="_blank" rel="noopener">Download PDF</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Outline blocks using details/summary -->
+    <details class="block" open>
+      <summary>Education</summary>
+      <div class="content">
+        <h4>Memorial University of Newfoundland — Master of Computer Engineering</h4>
+        <p>Sept 2023 – May 2025</p>
+        <ul>
+          <li>Advanced Digital Systems, Industrial Machine Vision, Software Design, Advanced Data Networks</li>
+        </ul>
+
+        <h4>Rensselaer Polytechnic Institute — B.Sc. Electrical Engineering</h4>
+        <p>Sept 2019 – May 2023</p>
+        <ul>
+          <li>VLSI Design, Embedded Control, Computer Components and Operations</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="block">
+      <summary>Experience</summary>
+      <div class="content">
+        <h4>Engineer — Shanghai Inspection & Testing Institute of Instruments & Automation Systems</h4>
+        <p>Sep 2022 – Aug 2023 · Shanghai, China</p>
+        <ul>
+          <li>Drafted technical proposals and cost estimates for safety certification services.</li>
+          <li>Defined design specs for embedded/high-voltage systems under safety & EMC standards.</li>
+          <li>Performed electrical calcs (voltage drop, fault current) with MATLAB & IEC methods.</li>
+          <li>Ran EMC tests, documented radiation levels, ensured IEC 61000 compliance.</li>
+          <li>Verified docs against IEC 61508 Functional Safety; supported audits and final certifications.</li>
+        </ul>
+
+        <h4>Risk Advisory Intern — Deloitte</h4>
+        <p>Aug 2019 – Nov 2019 · Shanghai, China</p>
+        <ul>
+          <li>Assisted a cybersecurity audit for an automotive client; mapped access permissions.</li>
+          <li>Delivered staff training on phishing prevention; improved test pass rates.</li>
+          <li>Documented access points and compliance gaps; drafted mitigation strategies.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="block">
+      <summary>Projects</summary>
+      <div class="content">
+        <h4>Wearable Motion Monitoring Device</h4>
+        <ul>
+          <li>ESP32-based IMU/force sensors for lower-limb rehab monitoring; real-time dashboard.</li>
+          <li>Wireless data pipeline + backend database; modular, cost-effective design.</li>
+        </ul>
+
+        <h4>License Plate Recognition (Classical CV)</h4>
+        <ul>
+          <li>Implemented grayscale, denoising, histogram EQ, Canny, morphology.</li>
+          <li>HSV-based segmentation + template matching; proposed CNN upgrades.</li>
+        </ul>
+
+        <h4>Flight Booking & Delay Prediction</h4>
+        <ul>
+          <li>Built RESTful APIs (ASP.NET Core) and ML models (MLP, SVM, NB, KNN).</li>
+          <li>Used SMOTE to fix imbalance; achieved &gt;90% accuracy with MLP on real flight/weather data.</li>
+          <li>Handled NDC 17/21 schema conversions; scalable API architecture.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="block">
+      <summary>Technologies</summary>
+      <div class="content">
+        <p><strong>Languages:</strong> English, Mandarin Chinese</p>
+        <p><strong>Skills:</strong> C/C++, Python, Java, Matlab, NX CAD, Embedded Systems, Signal Processing, Analog Electronics, Microcontrollers, Testing & Validation, Troubleshooting, Project Management</p>
+        <p><strong>Links:</strong>
+          <a href="mailto:makeawish1998@outlook.com">Email</a> ·
+          <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">LinkedIn</a> ·
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </details>
+  </main>
+
+  <footer class="container footnote">
+    © <span id="y"></span> Yineng Li
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
